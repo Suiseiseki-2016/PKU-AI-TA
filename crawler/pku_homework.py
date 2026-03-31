@@ -55,7 +55,7 @@ _NAME_PATTERN = re.compile(
     r'scope="row"[^>]*>\s*(\d{10})\s*</th>.*?table-data-cell-value">(.*?)</span>',
     re.DOTALL,
 )
-_FILE_PATH_PATTERN = re.compile(r"var filePath = '([^']+)'")
+_FILE_PATH_PATTERN = re.compile(r"(?:var filePath\s*=\s*|path:\s*)'(/usr/local/blackboard[^']+)'")
 
 
 class PKUHomeworkCrawler:
