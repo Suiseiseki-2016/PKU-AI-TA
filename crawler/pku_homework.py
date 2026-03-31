@@ -49,7 +49,7 @@ _STUDENT_PATTERN = re.compile(
     r'&userId=(\d+)&filePk=(\d+)&title=([^&"]+)&attemptPk=(\d+)[^>]*>([^<]+)</a>'
 )
 _STUDENT_ONCLICK_PATTERN = re.compile(
-    r"""onclick=['"]\s*checkWork\(\s*['"](\d+)['"]\s*,\s*['"](\d+)['"]\s*,\s*['"](\d+)['"]\s*\)[^>]*>([^<]+)</a>"""
+    r"""onclick=['"]\s*checkWork\(\s*['"](\d+)['"]\s*,\s*['"](\d+)['"]\s*,\s*['"](\d+)['"]\s*,\s*['"]\d*['"]\s*\)[^>]*>([^<]+)</a>"""
 )
 _NAME_PATTERN = re.compile(
     r'scope="row"[^>]*>\s*(\d{10})\s*</th>.*?table-data-cell-value">(.*?)</span>',

@@ -32,6 +32,7 @@ def grade(
     verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Show intermediate scores for each student")] = False,
     resume: Annotated[bool, typer.Option("--resume", "-r", help="Resume from previous partial run (if any)")] = False,
     regrade_unapproved: Annotated[bool, typer.Option("--regrade-unapproved", help="Keep approved students, only regrade those not approved")] = False,
+    force: Annotated[bool, typer.Option("--force", "-f", help="Re-grade submissions already marked as graded on the platform")] = False,
     prompt: Annotated[Path, typer.Option(help="System prompt file for the LLM (default: prompts/system_en.md)")] = Path("prompts/system_en.md"),
 ) -> None:
     """Crawl submissions, score with LLM, export review spreadsheet.
@@ -157,13 +158,17 @@ def grade(
             # Filter out already graded submissions (from PKU website)
             already_graded = [s for s in submissions if s.already_graded]
             if already_graded:
-                console.print(f"  [dim]Skipping {len(already_graded)} already-graded submission(s):[/dim]")
-                for s in already_graded:
-                    console.print(f"    [dim]{s.student_id} {s.student_name}[/dim]")
-                submissions = [s for s in submissions if not s.already_graded]
-                if not submissions:
-                    console.print("  No ungraded submissions left to process.")
-                    continue
+                if force:
+                    console.print(f"  [dim]--force: re-grading {len(already_graded)} already-graded submission(s)[/dim]")
+                else:
+                    console.print(f"  [dim]Skipping {len(already_graded)} already-graded submission(s):[/dim]")
+                    for s in already_graded:
+                        console.print(f"    [dim]{s.student_id} {s.student_name}[/dim]")
+                    submissions = [s for s in submissions if not s.already_graded]
+                    if not submissions:
+                        console.print("  No ungraded submissions left to process.")
+                        console.print("  [dim]Tip: use --force to re-grade already-graded submissions.[/dim]")
+                        continue
 
             # Filter out already processed submissions if resuming
             if processed_ids:
